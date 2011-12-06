@@ -24,19 +24,19 @@ Resources
 This cookbook comes with an _audit_ resource. Some examples of its use
 are as follows:
 
-  audit "/tmp" do
-    resource "directory"
-    owner "root"
-    group "root"
-    mode "1777"
-  end
+    audit "/tmp" do
+      resource "directory"
+      owner "root"
+      group "root"
+      mode "1777"
+    end
 
-  audit "/usr/bin/passwd" do
-    resource "file"
-    owner "root"
-    group "root"
-    mode  "4755"
-  end
+    audit "/usr/bin/passwd" do
+      resource "file"
+      owner "root"
+      group "root"
+      mode  "4755"
+    end
 
 If an audited resource does not match its signature, the following log
 will be printed in the output of chef-client:
