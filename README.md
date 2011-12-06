@@ -41,7 +41,7 @@ are as follows:
 If an audited resource does not match its signature, the following log
 will be printed in the output of chef-client:
 
-  WARN: Compliance::Failure <resource>
+    WARN: Compliance::Failure <resource>
 
 
 
