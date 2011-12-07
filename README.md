@@ -21,8 +21,7 @@ platforms may be added if time and resources permit.
 Recipes
 -------
 
-compliance::default
-~~~~~~~~~~~~~~~~~~~
+*compliance::default*
 
 The default recipe will identify the platform and include the relevant
 driver recipe. If a platform is not supported, the following will be
@@ -36,7 +35,7 @@ Attributes
 *[:compliance][:ignore]* - Array of files and directories to exempt from
 compliance checking.
 
-*[:compliance][:failure] - This is set to 'true' if any compliance
+*[:compliance][:failure]* - This is set to 'true' if any compliance
 checks indicate failure on a run. This provides a way to poll any nodes
 that are currently out of compliance:
 
