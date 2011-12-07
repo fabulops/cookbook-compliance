@@ -5,7 +5,7 @@ This cookbook is an attempt to add some minimal compliance and audit
 capabilities to nodes. Please note that this cookbook is not intended to
 replace host-based IDS systems, such as OSSEC. It is intended to be
 combined with the reporting handlers in chef to alert ops of accidental
-changes to the system.
+changes to the system outside of any cookbook managed resources.
 
 Requirements
 ------------
@@ -17,6 +17,30 @@ Platforms
 
 This cookbook is being developed against Ubuntu 10.04.3 LTS. Other
 platforms may be added if time and resources permit.
+
+Recipes
+-------
+
+compliance::default
+~~~~~~~~~~~~~~~~~~~
+
+The default recipe will identify the platform and include the relevant
+driver recipe. If a platform is not supported, the following will be
+printed in the output of _chef-client_:
+
+    DEBUG: Compliance:: Unsupported Platform
+
+Attributes
+----------
+
+*[:compliance][:ignore]* - Array of files and directories to exempt from
+compliance checking.
+
+*[:compliance][:failure] - This is set to 'true' if any compliance
+checks indicate failure on a run. This provides a way to poll any nodes
+that are currently out of compliance:
+
+    knife search node 'compliance_failure:true'
 
 Resources
 ---------
@@ -39,11 +63,32 @@ are as follows:
     end
 
 If an audited resource does not match its signature, the following log
-will be printed in the output of chef-client:
+will be printed in the output of _chef-client_:
 
     WARN: Compliance::Failure <resource>
 
+Also, if an audited resource does not exist, a compliance check will not
+be performed and no action will be taken.
 
+Finally, Chef will make sure the desired state is set. If you make
+local changes to files covered by this cookbook, add the full paths to
+*node[:compliance][:ignore]* and they will not be brought into
+compliance.
+
+For example, if you administratively change */usr/bin/passwd*, adding:
+
+    "compliance": {
+      "ignore": [
+        "/usr/bin/passwd"
+      ]
+    }
+
+to the node will prevent this cookbook from taking action. Additional
+files and directories can be added to the attribute array as needed.
+Ignored resources will be reflected in the output of _chef-client_ with
+the following warning:
+
+    WARN: Compliance::Ignore <resource>
 
 LICENSE AND AUTHOR
 ==================
