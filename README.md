@@ -94,7 +94,7 @@ LICENSE AND AUTHOR
 
 Author:: Adam Garside (<adam.garside@gmail.com>)
 
-Copyright 2009-2011, Adam Garside
+Copyright 2009-2012, Adam Garside
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
