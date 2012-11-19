@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Cookbook-compliance by fabulops</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Cookbook-compliance</h1>
+        <p>Opscode Chef cookbook to verify ownership, permissions, etc., on important standard system binaries and files</p>
+
+        <p class="view"><a href="https://github.com/fabulops/cookbook-compliance">View the Project on GitHub <small>fabulops/cookbook-compliance</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/fabulops/cookbook-compliance/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/fabulops/cookbook-compliance/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/fabulops/cookbook-compliance">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>DESCRIPTION</h1>
+
+<p>This cookbook is an attempt to add some minimal compliance and audit
+capabilities to nodes. Please note that this cookbook is not intended to
+replace host-based IDS systems, such as OSSEC. It is intended to be
+combined with the reporting handlers in chef to alert ops of accidental
+changes to the system outside of any cookbook managed resources.</p>
+
+<h2>Requirements</h2>
+
+<p>This cookbook is being developed against Chef 0.10.x</p>
+
+<h2>Platforms</h2>
+
+<p>This cookbook is being developed against Ubuntu 10.04.3 LTS. Other
+platforms may be added if time and resources permit.</p>
+
+<h2>Recipes</h2>
+
+<p><em>compliance::default</em></p>
+
+<p>The default recipe will identify the platform and include the relevant
+driver recipe. If a platform is not supported, the following will be
+printed in the output of <em>chef-client</em>:</p>
+
+<pre><code>DEBUG: Compliance:: Unsupported Platform
+</code></pre>
+
+<h2>Attributes</h2>
+
+<p><em>[:compliance][:ignore]</em> - Array of files and directories to exempt from
+compliance checking.</p>
+
+<p><em>[:compliance][:failure]</em> - This is set to 'true' if any compliance
+checks indicate failure on a run. This provides a way to poll any nodes
+that are currently out of compliance:</p>
+
+<pre><code>knife search node 'compliance_failure:true'
+</code></pre>
+
+<h2>Resources</h2>
+
+<p>This cookbook comes with an <em>audit</em> resource. Some examples of its use
+are as follows:</p>
+
+<pre><code>audit "/tmp" do
+  resource "directory"
+  owner "root"
+  group "root"
+  mode "1777"
+end
+
+audit "/usr/bin/passwd" do
+  resource "file"
+  owner "root"
+  group "root"
+  mode  "4755"
+end
+</code></pre>
+
+<p>If an audited resource does not match its signature, the following log
+will be printed in the output of <em>chef-client</em>:</p>
+
+<pre><code>WARN: Compliance::Failure &lt;resource&gt;
+</code></pre>
+
+<p>Also, if an audited resource does not exist, a compliance check will not
+be performed and no action will be taken.</p>
+
+<p>Finally, Chef will make sure the desired state is set. If you make
+local changes to files covered by this cookbook, add the full paths to
+<em>node[:compliance][:ignore]</em> and they will not be brought into
+compliance.</p>
+
+<p>For example, if you administratively change <em>/usr/bin/passwd</em>, adding:</p>
+
+<pre><code>"compliance": {
+  "ignore": [
+    "/usr/bin/passwd"
+  ]
+}
+</code></pre>
+
+<p>to the node will prevent this cookbook from taking action. Additional
+files and directories can be added to the attribute array as needed.
+Ignored resources will be reflected in the output of <em>chef-client</em> with
+the following warning:</p>
+
+<pre><code>WARN: Compliance::Ignore &lt;resource&gt;
+</code></pre>
+
+<h1>LICENSE AND AUTHOR</h1>
+
+<p>Author:: Adam Garside (<a href="mailto:adam.garside@gmail.com">adam.garside@gmail.com</a>)</p>
+
+<p>Copyright 2009-2012, Adam Garside</p>
+
+<p>Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at</p>
+
+<pre><code>http://www.apache.org/licenses/LICENSE-2.0
+</code></pre>
+
+<p>Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/fabulops">fabulops</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
